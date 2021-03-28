@@ -1,0 +1,42 @@
+﻿@namespace Xiaobao.PaaS.Portal.Layouts
+@using Xiaobao.PaaS.Portal.Client.Pages
+@using Microsoft.AspNetCore.Components
+@inherits LayoutComponentBase
+
+<AntDesign.Pro.Layout.BasicLayout Logo="@("https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg")"
+                                  MenuData="_menuData">
+    <RightContentRender>
+        <HeaderContent />
+    </RightContentRender>
+    <ChildContent>
+        @Body
+        <BackTop></BackTop>
+    </ChildContent>
+</AntDesign.Pro.Layout.BasicLayout>
+<SettingDrawer />
+
+@code
+{ 
+    
+    private MenuDataItem[] _menuData;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        _menuData = new MenuDataItem[] {
+            new MenuDataItem{
+                Path = "/",
+                Name = "welcome",
+                Key = "welcome",
+                Icon = "smile"
+            },
+            new MenuDataItem
+            {
+                Path = "/users",
+                Name = "用户列表",
+                Key = "user",
+                Icon = "user"        
+            }     
+        };
+    } 
+}

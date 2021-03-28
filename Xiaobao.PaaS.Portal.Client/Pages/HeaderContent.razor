@@ -1,0 +1,10 @@
+﻿@namespace Xiaobao.PaaS.Portal.Client.Pages
+@inherits AntDomComponentBase
+
+<Space Class="@ClassMapper.Class">
+    <div style="width:90px">
+        <SpaceItem>
+            <AvatarDropdown Name="@_currentUser.Name" OnItemSelected="HandleSelectUser" Avatar="https://cdn.schoolpal.cn/male-big.jpg" />
+        </SpaceItem>
+    </div>
+</Space>

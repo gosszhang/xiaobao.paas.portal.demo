@@ -1,0 +1,81 @@
+﻿@page "/users"
+
+<PageContainer Title="账号管理">
+    <Breadcrumb>
+        <Breadcrumb>
+            <BreadcrumbItem><a href="/">主页</a></BreadcrumbItem>
+            <BreadcrumbItem><a href="/user">账号管理</a></BreadcrumbItem>
+        </Breadcrumb>
+    </Breadcrumb>
+    <ChildContent>
+        <Button style="margin-bottom: 20px" Icon="plus" Type="@ButtonType.Primary" @onclick="ShowAddUser">
+            添加账号
+        </Button>
+        <Card Class="listCard"
+              Title="">
+            <Extra>
+                <Space>
+                    <SpaceItem>
+                        <Input @bind-Value="@_pageRequest.Name" Placeholder="请输入姓名" />
+                    </SpaceItem>
+                    <SpaceItem>
+                        <Button Icon="search" Type="@ButtonType.Primary" @onclick="LoadDataAsync">
+                        </Button>
+                    </SpaceItem>
+                </Space>
+            </Extra>
+            <ChildContent>
+                <Table @ref="table"
+                       TItem="PaasPortalSdk.UserModel"
+                       DataSource="@_userPageData.List.ToList()"
+                       Context="contextUser"
+                       Total="_userPageData.Total"
+                       @bind-PageIndex="_pageRequest.Index"
+                       @bind-PageSize="_pageRequest.Size"
+                       OnPageIndexChange="LoadDataAsync"
+                       Loading="@loading">
+                    <RowTemplate>
+                        <Column Title="姓名" Field="@contextUser.Name" Sortable="false" />
+                        <Column Title="邮箱" Field="@contextUser.Email" Sortable="false" />
+                        <Column Title="角色" @bind-Field="@contextUser.Role">
+                        </Column>
+                        <Column Title="启用状态" Field="@contextUser.Enable" Sortable="false">
+                            <Switch @bind-Value="@contextUser.Enable" Disabled="true"></Switch>
+                        </Column>
+                        <ActionColumn Title="操作">
+                            <Space>
+                                <SpaceItem><Button OnClick="() => ShowEditUser(contextUser)">编辑</Button></SpaceItem>
+                            </Space>
+                        </ActionColumn>
+                    </RowTemplate>
+                </Table>
+                <p> 每页 @_pageRequest.Index 条,共 @_userPageData.Total 条</p>
+            </ChildContent>
+        </Card>
+    </ChildContent>
+</PageContainer>
+<Drawer Closable="true" Width="720" Visible="@_userDrawerComponentOption.Visible" Title='@_userDrawerComponentOption.Title' OnClose="_=>_userDrawerComponentOption.Close()">
+    <Template style="height:90%">
+        <Form Loading="loading" Model="@_userModel"
+              LabelColSpan="4"
+              WrapperColSpan="16"
+              OnFinish="SaveUser">
+            <FormItem Label="姓名">
+                <Input @bind-Value="@context.Name" Placeholder="请输入姓名" />
+            </FormItem>
+            <FormItem Label="邮箱">
+                <Input @bind-Value="@context.Email" Placeholder="请输入邮箱" />
+            </FormItem>
+            <FormItem Label="用户角色">
+                <AutoComplete @bind-Value="@context.Role" Options="@_rolesOptions" Placeholder="请选择角色" />
+            </FormItem>
+            <FormItem Label="启用状态">
+                <Switch @bind-Value="@context.Enable"></Switch>
+            </FormItem>
+            <FormItem WrapperColOffset="4" WrapperColSpan="16">
+                <Button Type="@ButtonType.Default" HtmlType="button" OnClick="_userDrawerComponentOption.Close">取消</Button>
+                <Button Type="@ButtonType.Primary" HtmlType="submit" Style="float: right">确认</Button>
+            </FormItem>
+        </Form>
+    </Template>
+</Drawer>

@@ -1,0 +1,22 @@
+@using BasicLayout = Xiaobao.PaaS.Portal.Layouts.BasicLayout
+@inject NavigationManager NavigationManager
+
+<Router AppAssembly="@typeof(Program).Assembly">
+    <Found Context="routeData">
+        <AntContainer />
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(BasicLayout)" />
+    </Found>
+    <NotFound>
+        <LayoutView Layout="@typeof(BasicLayout)">
+            @{
+                var uri = new Uri(NavigationManager.Uri);
+
+                if (uri.AbsolutePath == "/index.html")
+                {
+                    NavigationManager.NavigateTo("/");
+                }
+            }
+            <p>Sorry, there's nothing at this address99.</p>
+        </LayoutView>
+    </NotFound>
+</Router>
